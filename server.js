@@ -307,30 +307,31 @@ app.get('/oauth/callback', async (req, res) => {
       <!DOCTYPE html>
       <html>
       <head>
-        <title>Authentication Success</title>
+        <title>Success</title>
         <style>
-          body { font-family: system-ui; max-width: 800px; margin: 0 auto; padding: 20px; background: #f3f4f6; }
-          .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-          h2 { color: #1f2937; margin-top: 0; }
+          body { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+            font-family: system-ui; 
+          }
+          .message { 
+            text-align: center; 
+            padding: 20px; 
+          }
           .success { color: #10b981; }
-          pre { background: #1f2937; color: #10b981; padding: 15px; border-radius: 8px; overflow-x: auto; font-size: 12px; }
-          button { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
         </style>
       </head>
       <body>
-        <div class="card">
-          <h2 class="success">✅ Subaccount Connected Successfully!</h2>
-          <p><strong>Location ID:</strong> <code>${locationId}</code></p>
-          <p><strong>Company ID:</strong> <code>${companyId || 'N/A'}</code></p>
-          <p><strong>User ID:</strong> <code>${userId || 'N/A'}</code></p>
-          <p><strong>Token Expires in:</strong> ${expires_in} seconds (${Math.floor(expires_in / 3600)} hours)</p>
-          
-          <h3>📝 Full Response:</h3>
-          <pre>${JSON.stringify(response.data, null, 2)}</pre>
-          
-          <button onclick="window.close()">Close Window</button>
+        <div class="message">
+          <h2 class="success">✓ Connected Successfully</h2>
+          <p>Subaccount "${locationName}" has been connected.</p>
+          <p>This window will close automatically...</p>
         </div>
         <script>
+          // Notify parent window
           if (window.opener) {
             window.opener.postMessage({ 
               type: 'location_connected', 
@@ -338,6 +339,8 @@ app.get('/oauth/callback', async (req, res) => {
               locationName: '${locationName.replace(/'/g, "\\'")}' 
             }, '*');
           }
+          // Close the window after 2 seconds
+          setTimeout(() => window.close(), 2000);
         </script>
       </body>
       </html>
@@ -352,7 +355,7 @@ app.get('/oauth/callback', async (req, res) => {
       <html>
         <body style="font-family: monospace; padding: 20px;">
           <h2 style="color: red;">❌ Error</h2>
-          <pre>${JSON.stringify(error.response?.data || error.message, null, 2)}</pre>
+          <p>Failed to connect subaccount. Please try again.</p>
           <button onclick="window.close()">Close</button>
         </body>
       </html>
