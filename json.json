@@ -1,0 +1,74 @@
+
+{
+  "data": [
+    {
+      "Local_Events": [
+  {
+    "Number": 1,
+    "Event_Name": "Summer Dance Party",
+    "Category": "Music & Nightlife",
+    "Description": "A recurring dance event on the City of Folsom calendar. This listing is confirmed for June 17, 2026.",
+    "Location": "Folsom, CA",
+    "Event_Date": "June 17th | 1:00 PM",
+    "City_State":"Folsom, CA"
+  },
+  {
+    "Number": 2,
+    "Event_Name": "Music on Main",
+    "Category": "Music & Nightlife",
+    "Description": "A new concert series celebrating music, community, and summer nights on Main Street. The series runs in June and brings live performances to the heart of downtown Elk Grove.",
+    "Location": "Main Street Elk Grove, Elk Grove, CA",
+    "Event_Date": "June 12th | 6:00 PM",
+    "City_State":"Elk Grove, CA"
+  },
+  {
+    "Number": 3,
+    "Event_Name": "FAM FEST 2025 Food Art and Music",
+    "Category": "Arts & Culture",
+    "Description": "A community festival featuring artist booths, nonprofit tables, live community music, and food. The event is positioned as a fundraiser supporting local organizations and arts programming.",
+    "Location": "Auburn Recreation Park, 123 Recreation Drive, Auburn, CA",
+    "Event_Date": "June 21st | 2:00 PM",
+    "City_State":"Auburn, CA"
+  },
+  {
+    "Number": 4,
+    "Event_Name": "Big Trucks Summer: Water",
+    "Category": "Fitness & Outdoor",
+    "Description": "The second Thursday truck event continues the June series with a water-themed showcase. It is designed as an interactive, family-friendly outdoor experience.",
+    "Location": "Mahany Park, 1501 Pleasant Grove Blvd, Roseville, CA",
+    "Event_Date": "June 11th | 9:00 AM",
+    "City_State":"Roseville, CA"
+  },
+  {
+    "Number": 5,
+    "Event_Name": "Uptown Funk",
+    "Category": "Music & Nightlife",
+    "Description": "A live concert event listed by the Placer County Fair for late June. The performance is scheduled at the fairgrounds in Roseville.",
+    "Location": "Placer County Fairgrounds, Roseville, CA",
+    "Event_Date": "June 25th | 7:00 PM",
+    "City_State":"Roseville, CA"
+  },
+  {
+    "Number": 6,
+    "Event_Name": "Second Saturday - Midtown Sacramento",
+    "Category": "Arts & Culture",
+    "Description": "Midtown’s monthly arts-and-culture celebration features local artists, live music, theater, culinary arts, family-friendly park activities, and nightlife specials. June’s edition is scheduled citywide throughout Midtown.",
+    "Location": "Midtown Sacramento, CA",
+    "Event_Date": "June 13th | 12:00 PM",
+    "City_State":"CA"
+  },
+  {
+    "Number": 7,
+    "Event_Name": "Father's Day and Sunday Drives at the California Automobile Museum",
+    "Category": "Father's Day",
+    "Description": "A Father’s Day-themed museum event celebrating car culture and Sunday drives. It offers a family-friendly way to mark the holiday in Sacramento.",
+    "Location": "California Automobile Museum, Sacramento, CA",
+    "Event_Date": "June 21st | 10:00 AM",
+    "City_State":"CA"
+  }
+],
+      "Has_Local_Events": "Yes",
+      "Event_Location": ""
+    }
+  ]
+}
