@@ -315,16 +315,23 @@ function buildAttachPayload(platform, account) {
       };
 
     case 'linkedin':
-      return { type: type || 'page', originId: id, name, avatar: avatar || '' };
+      // GHL validates urn as a required non-empty string (AttachLinkedinAccountDTO).
+      // Pages/profiles from Step 2 include a `urn` field; fall back to the id,
+      // which for LinkedIn is itself a URN like "urn:li:organization:12345".
+      return {
+        type: type || 'page',
+        originId: id,
+        name,
+        avatar: avatar || '',
+        urn: raw?.urn || id
+      };
 
     case 'facebook':
       return { type: 'page', originId: id, name, avatar: avatar || '' };
 
-    case 'instagram': {
-      const payload = { type: 'page', originId: id, name, avatar: avatar || '' };
-      if (raw?.pageId) payload.pageId = raw.pageId;
-      return payload;
-    }
+    case 'instagram':
+      // AttachIGAccountDTO: originId, name, avatar, pageId (pageId is REQUIRED, no `type` field)
+      return { originId: id, name, avatar: avatar || '', pageId: raw?.pageId || '' };
 
     default: // youtube, tiktok, tiktok-business, pinterest, threads
       return { originId: id, name, avatar: avatar || '' };
@@ -774,7 +781,6 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running at http://localhost:${PORT}`);
 });
-
 
 
 
