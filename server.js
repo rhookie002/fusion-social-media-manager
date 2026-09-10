@@ -438,6 +438,107 @@ app.get('/oauth/callback', async (req, res) => {
   }
 });
 
+// ============ GLOBAL STATS (cached, computed across ALL locations) ============
+// Counting connections for every subaccount means one GHL call per location,
+// so results are cached in memory and recomputed at most every STATS_TTL_MS
+// (or on demand via /api/stats?refresh=true). Concurrent requests share one
+// in-flight computation.
+const STATS_TTL_MS = 10 * 60 * 1000;
+const STATS_CONCURRENCY = 10;
+let statsCache = { data: null, computedAt: 0, promise: null };
+
+async function fetchAllActiveLocationIds() {
+  const ids = [];
+  const pageSize = 1000;
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await supabase
+      .from('locations')
+      .select('location_id')
+      .eq('is_active', true)
+      .range(from, from + pageSize - 1);
+    if (error) throw error;
+    ids.push(...(data || []).map(d => d.location_id));
+    if (!data || data.length < pageSize) break;
+  }
+  return ids;
+}
+
+async function computeGlobalStats() {
+  const started = Date.now();
+  const ids = await fetchAllActiveLocationIds();
+
+  let totalConnections = 0;
+  let totalIssues = 0;
+  let locationsWithIssues = 0;
+  let failedLocations = 0;
+  let cursor = 0;
+
+  async function worker() {
+    while (cursor < ids.length) {
+      const locationId = ids[cursor++];
+      try {
+        const accessToken = await getValidAccessToken(locationId);
+        const response = await axios.get(`${GHL_API_BASE}/social-media-posting/${locationId}/accounts`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'Version': GHL_API_VERSION
+          },
+          timeout: 15000
+        });
+        const accounts = response.data.results?.accounts || [];
+        totalConnections += accounts.length;
+        const issues = accounts.filter(a => a.isExpired === true).length;
+        totalIssues += issues;
+        if (issues > 0) locationsWithIssues++;
+      } catch (error) {
+        failedLocations++;
+      }
+    }
+  }
+
+  const workers = Array.from({ length: Math.min(STATS_CONCURRENCY, Math.max(1, ids.length)) }, worker);
+  await Promise.all(workers);
+
+  const data = {
+    totalLocations: ids.length,
+    totalConnections,
+    totalIssues,
+    locationsWithIssues,
+    failedLocations,
+    computedAt: new Date().toISOString(),
+    computeMs: Date.now() - started
+  };
+  console.log(`[stats] computed for ${ids.length} locations in ${data.computeMs}ms (${failedLocations} failed)`);
+  return data;
+}
+
+app.get('/api/stats', async (req, res) => {
+  try {
+    const force = req.query.refresh === 'true';
+    const fresh = statsCache.data && (Date.now() - statsCache.computedAt) < STATS_TTL_MS;
+
+    if (!force && fresh) {
+      return res.json({ success: true, stats: statsCache.data, cached: true });
+    }
+
+    if (!statsCache.promise) {
+      statsCache.promise = computeGlobalStats()
+        .then(data => {
+          statsCache.data = data;
+          statsCache.computedAt = Date.now();
+          return data;
+        })
+        .finally(() => { statsCache.promise = null; });
+    }
+
+    const data = await statsCache.promise;
+    res.json({ success: true, stats: data, cached: false });
+  } catch (error) {
+    console.error('Error computing stats:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ============ API ROUTES ============
 
 // Get connected locations — paginated + searchable.
@@ -781,8 +882,6 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running at http://localhost:${PORT}`);
 });
-
-
 
 
 // import express from 'express';
