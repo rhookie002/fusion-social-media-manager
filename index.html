@@ -13,6 +13,762 @@
     .subtitle { color: #6b7280; margin-bottom: 24px; }
     .btn-primary { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
     .btn-primary:hover { background: #2563eb; }
+    .btn-primary:disabled { background: #93c5fd; cursor: not-allowed; }
+    .btn-secondary { background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; }
+    .btn-secondary:hover { background: #4b5563; }
+    .btn-success { background: #10b981; }
+    .btn-success:hover { background: #059669; }
+    .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 16px; background: #f9fafb; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 16px; border-bottom: 1px solid #f3f4f6; }
+    tr:hover { background: #f9fafb; }
+    .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+    .filter-btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; border: 1px solid #d1d5db; background: white; transition: all 0.2s; }
+    .filter-btn:hover { background: #f3f4f6; }
+    .filter-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+    .delete-account-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 12px; margin-left: 6px; padding: 2px 4px; border-radius: 4px; }
+    .delete-account-btn:hover { background: #fee2e2; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    .search-box { flex: 1; max-width: 300px; position: relative; }
+    .search-box input { width: 100%; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 8px; }
+    .stats { display: flex; gap: 16px; margin-bottom: 20px; }
+    .stat-card { background: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-number { font-size: 28px; font-weight: bold; color: #1f2937; }
+    .stat-label { font-size: 14px; color: #6b7280; }
+    .account-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #f3f4f6; border-radius: 20px; margin: 4px; font-size: 13px; }
+    .account-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+    .status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-left: 8px; }
+    .status-green { background: #10b981; box-shadow: 0 0 0 2px #d1fae5; }
+    .status-red { background: #ef4444; box-shadow: 0 0 0 2px #fee2e2; }
+    .loading { text-align: center; padding: 40px; color: #6b7280; }
+    .spinner { border: 3px solid #f3f4f6; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+    .spinner-sm { border: 2px solid #f3f4f6; border-top: 2px solid #3b82f6; border-radius: 50%; width: 16px; height: 16px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; border-radius: 12px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+    .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 20px; }
+    .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; }
+    .connect-btn, .disconnect-btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; border: none; margin: 0 4px; }
+    .connect-btn { background: #10b981; color: white; }
+    .disconnect-btn { background: #fee2e2; color: #dc2626; }
+    .edit-btn { background: #e0e7ff; color: #4338ca; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; border: none; margin: 0 4px; }
+    .empty-state { text-align: center; padding: 60px; color: #9ca3af; }
+    .empty-state h3 { margin-bottom: 12px; color: #6b7280; }
+    .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .platform-option { text-align: center; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .platform-option:hover { border-color: #3b82f6; background: #eff6ff; }
+    .platform-option.selected { border-color: #3b82f6; background: #dbeafe; }
+    .platform-icon { font-size: 28px; margin-bottom: 6px; }
+    .refresh-icon { cursor: pointer; margin-left: 8px; font-size: 14px; }
+    .success-message { background: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    .error-message { background: #fee2e2; color: #dc2626; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    .info-message { background: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
+    .account-type-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #e0e7ff; color: #4338ca; text-transform: capitalize; }
+    /* Pagination */
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: white; border-top: 1px solid #e5e7eb; flex-wrap: wrap; gap: 12px; }
+    .pagination-info { font-size: 13px; color: #6b7280; }
+    .pagination-buttons { display: flex; gap: 6px; align-items: center; }
+    .page-btn { padding: 7px 13px; border: 1px solid #d1d5db; background: white; border-radius: 8px; font-size: 13px; cursor: pointer; color: #374151; }
+    .page-btn:hover:not(:disabled) { background: #f3f4f6; }
+    .page-btn.current { background: #3b82f6; color: white; border-color: #3b82f6; }
+    .page-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>FGP Social Media Manager</h1>
+      <p class="subtitle">Connect and manage social media accounts for each subaccount individually</p>
+
+      <div style="display: flex; gap: 12px;">
+        <button class="btn-primary" onclick="openAddLocationModal()">+ Add New Subaccount</button>
+        <button class="btn-secondary" onclick="refreshAll()">Refresh All</button>
+      </div>
+    </div>
+
+    <div id="mainContent">
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalLocations">0</div>
+          <div class="stat-label">Connected Subaccounts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalConnections">0</div>
+          <div class="stat-label">Social Connections (this page)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalIssues">0</div>
+          <div class="stat-label">Accounts with Issues (this page)</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search subaccount by name..." oninput="onSearchInput()">
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button class="filter-btn active" onclick="setFilter('all')" id="filterAll">All</button>
+          <button class="filter-btn" onclick="setFilter('healthy')" id="filterHealthy">Healthy</button>
+          <button class="filter-btn" onclick="setFilter('expired')" id="filterExpired">Expired/Issues</button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Subaccount Name</th>
+              <th>Location ID</th>
+              <th>Connected Social Accounts</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="locationsTableBody">
+            <tr>
+              <td colspan="4" class="loading">
+                <div class="spinner"></div>
+                Loading connected subaccounts...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="pagination" id="paginationControls" style="display: none;">
+          <div class="pagination-info" id="paginationInfo"></div>
+          <div class="pagination-buttons" id="paginationButtons"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Location Modal -->
+  <div id="addLocationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Connect New Subaccount</h3>
+        <button class="close-btn" onclick="closeAddLocationModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-message">
+          Click the button below to authenticate with GoHighLevel for this subaccount.
+          <br><br>
+          You will be redirected to GHL to log in and grant permissions.
+        </div>
+        <button class="btn-primary" style="width: 100%;" onclick="startLocationAuth()">Connect Subaccount</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connect Social Account Modal -->
+  <div id="connectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Connect Social Account</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalLocationInfo" style="margin-bottom: 16px; padding: 8px; background: #f3f4f6; border-radius: 6px;"></div>
+
+        <h4 style="margin-bottom: 12px;">Select Platform</h4>
+        <div class="platform-grid" id="platformGrid">
+          <div class="platform-option" data-platform="facebook" onclick="selectPlatform('facebook')">
+            <div class="platform-icon"><i class="fa fa-facebook-f" style="font-size:48px;color:#1877F2"></i></div>
+            <div>Facebook</div>
+          </div>
+          <div class="platform-option" data-platform="instagram" onclick="selectPlatform('instagram')">
+            <div class="platform-icon"><i class="fa fa-instagram" style="font-size:48px;color:red"></i></div>
+            <div>Instagram</div>
+          </div>
+          <div class="platform-option" data-platform="linkedin" onclick="selectPlatform('linkedin')">
+            <div class="platform-icon"><i class="fa fa-linkedin-square" style="font-size:48px;color:#0087bf"></i></div>
+            <div>LinkedIn</div>
+          </div>
+          <div class="platform-option" data-platform="google" onclick="selectPlatform('google')">
+            <div class="platform-icon"><i class="fa fa-google" style="font-size:48px;color:#4285F4"></i></div>
+            <div>Google</div>
+          </div>
+          <div class="platform-option" data-platform="youtube" onclick="selectPlatform('youtube')">
+            <div class="platform-icon"><i class="fa fa-youtube-play" style="font-size:48px;color:red"></i></div>
+            <div>YouTube</div>
+          </div>
+          <div class="platform-option" data-platform="tiktok" onclick="selectPlatform('tiktok')">
+            <div class="platform-icon"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBv0nGJJHNAfZCqzeIWCylu21-qlGaZTVGnw&s" style="width: 48px; height: 48px;"></div>
+            <div>TikTok</div>
+          </div>
+          <div class="platform-option" data-platform="pinterest" onclick="selectPlatform('pinterest')">
+            <div class="platform-icon"><i class="fa fa-pinterest" style="font-size:48px;color:red"></i></div>
+            <div>Pinterest</div>
+          </div>
+        </div>
+
+        <div id="oauthStatus"></div>
+
+        <button id="startOAuthBtn" class="btn-primary" style="width: 100%; margin-top: 16px;" onclick="startPlatformOAuth()" disabled>Select a platform first</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ============ STATE ============
+    const PAGE_SIZE = 15;
+    let locations = [];
+    let socialAccountsCache = {};
+    let currentConnectingLocation = null;
+    let selectedPlatform = null;
+    let oauthAccountId = null;
+    let availableAccounts = []; // normalized accounts returned by /api/oauth/accounts
+    let currentFilter = 'all';  // 'all', 'healthy', 'expired'
+    let currentPage = 1;
+    let totalPages = 1;
+    let totalCount = 0;
+    let searchTimer = null;
+    let loadSequence = 0; // guards against out-of-order responses
+
+    // URL param for auto-filtering to one location
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoFilterLocationId = urlParams.get('locationId');
+    if (autoFilterLocationId) {
+      const statsContainer = document.querySelector('.stats');
+      if (statsContainer) statsContainer.style.display = 'none';
+    }
+
+    // ============ DATA LOADING (paginated) ============
+    async function loadLocations(page = 1) {
+      const seq = ++loadSequence;
+      currentPage = page;
+
+      const tbody = document.getElementById('locationsTableBody');
+      tbody.innerHTML = '<tr><td colspan="4" class="loading"><div class="spinner"></div>Loading subaccounts...</td></tr>';
+
+      try {
+        const params = new URLSearchParams({ page: String(page), limit: String(PAGE_SIZE) });
+        const q = document.getElementById('searchInput').value.trim();
+        if (q) params.set('q', q);
+        if (autoFilterLocationId) params.set('locationId', autoFilterLocationId);
+
+        const response = await fetch(`/api/locations?${params.toString()}`);
+        const data = await response.json();
+        if (seq !== loadSequence) return; // a newer request superseded this one
+
+        if (!data.success) throw new Error(data.error || 'Failed to load');
+
+        locations = data.locations || [];
+        totalCount = data.total || locations.length;
+        totalPages = data.totalPages || Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+        socialAccountsCache = {};
+
+        // Render the table immediately (accounts column shows a small spinner),
+        // then fetch social accounts for JUST this page and re-render.
+        renderTable(true);
+        renderPagination();
+        document.getElementById('totalLocations').textContent = totalCount;
+
+        await loadSocialAccountsForPage(seq);
+        if (seq !== loadSequence) return;
+
+        updateStats();
+        renderTable(false);
+      } catch (error) {
+        console.error('Error loading locations:', error);
+        if (seq === loadSequence) {
+          tbody.innerHTML = '<tr><td colspan="4" class="loading">Error loading locations</td></tr>';
+        }
+      }
+    }
+
+    // Fetch social accounts only for the locations on the current page
+    async function loadSocialAccountsForPage(seq) {
+      const locationIds = locations.map(loc => loc.location_id);
+      if (locationIds.length === 0) return;
+
+      try {
+        const response = await fetch('/api/locations/social-accounts/batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ locationIds })
+        });
+        const data = await response.json();
+        if (seq !== undefined && seq !== loadSequence) return;
+        if (data.success) socialAccountsCache = data.accountsByLocation || {};
+      } catch (error) {
+        console.error('Error loading social accounts:', error);
+        socialAccountsCache = {};
+      }
+    }
+
+    // Debounced server-side search
+    function onSearchInput() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => loadLocations(1), 350);
+    }
+
+    // ============ STATS / FILTERS ============
+    function updateStats() {
+      document.getElementById('totalLocations').textContent = totalCount;
+
+      let totalConnections = 0;
+      let totalIssues = 0;
+      for (const locationId in socialAccountsCache) {
+        const accounts = socialAccountsCache[locationId] || [];
+        totalConnections += accounts.length;
+        totalIssues += accounts.filter(a => a.isExpired === true).length;
+      }
+      document.getElementById('totalConnections').textContent = totalConnections;
+      document.getElementById('totalIssues').textContent = totalIssues;
+    }
+
+    function setFilter(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      if (filter === 'all') document.getElementById('filterAll')?.classList.add('active');
+      if (filter === 'healthy') document.getElementById('filterHealthy')?.classList.add('active');
+      if (filter === 'expired') document.getElementById('filterExpired')?.classList.add('active');
+      renderTable(false);
+    }
+
+    function locationHasIssues(locationId) {
+      const accounts = socialAccountsCache[locationId] || [];
+      return accounts.some(account => account.isExpired === true);
+    }
+
+    function locationIsHealthy(locationId) {
+      const accounts = socialAccountsCache[locationId] || [];
+      if (accounts.length === 0) return true;
+      return accounts.every(account => account.isExpired === false);
+    }
+
+    // ============ RENDERING ============
+    function renderAccountBadge(location, account, shortLabel, fallbackIconHtml) {
+      return `
+        <div class="account-badge">
+          ${account.avatar ? `<img src="${account.avatar}" class="account-avatar" title="${account.expire ? 'Expires on: ' + new Date(account.expire).toLocaleDateString() : ''}" onerror="this.style.display='none'">` : fallbackIconHtml}
+          <span>${escapeHtml(account.name)}</span>
+          <span class="status-indicator ${!account.isExpired ? 'status-green' : 'status-red'}" title="${account.isExpired ? 'Expired/Invalid' : 'Active'}"></span>
+          <span style="font-size: 11px; color: #6b7280;">${shortLabel}</span>
+          <button class="delete-account-btn" onclick="deleteSocialAccount('${location.location_id}', '${account.id}')" title="Delete this connection">✖</button>
+        </div>`;
+    }
+
+    function renderTable(accountsLoading) {
+      const tbody = document.getElementById('locationsTableBody');
+      if (!tbody) return;
+
+      let filteredLocations = [...locations];
+      if (!accountsLoading) {
+        if (currentFilter === 'healthy') {
+          filteredLocations = locations.filter(loc => locationIsHealthy(loc.location_id));
+        } else if (currentFilter === 'expired') {
+          filteredLocations = locations.filter(loc => locationHasIssues(loc.location_id));
+        }
+      }
+
+      if (filteredLocations.length === 0) {
+        let message = 'No subaccounts found';
+        if (currentFilter === 'healthy') message = 'No healthy subaccounts on this page';
+        if (currentFilter === 'expired') message = 'No subaccounts with issues on this page';
+        if (locations.length === 0 && totalCount === 0) message = 'No subaccounts connected yet';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="empty-state">
+              <h3>${message}</h3>
+              <p>${totalCount === 0 ? 'Click "Add New Subaccount" to get started' : 'Try another page or clear the filter'}</p>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filteredLocations.map(location => {
+        const socialAccounts = socialAccountsCache[location.location_id] || [];
+        const hasIssues = locationHasIssues(location.location_id);
+
+        const platformConfig = [
+          ['facebook', 'FB', '<i class="fa fa-facebook-f" style="font-size:20px;color:#1877F2"></i>'],
+          ['instagram', 'IG', '<i class="fa fa-instagram" style="font-size:20px;color:red"></i>'],
+          ['linkedin', 'LI', '<i class="fa fa-linkedin" style="font-size:20px;color:#0087bf"></i>'],
+          ['youtube', 'YT', '▶'],
+          ['google', 'GMB', '📍'],
+          ['tiktok', 'TT', '🎵'],
+          ['pinterest', 'PIN', '<i class="fa fa-pinterest" style="font-size:20px;color:red"></i>']
+        ];
+
+        let accountsHtml;
+        if (accountsLoading) {
+          accountsHtml = '<span class="spinner-sm"></span> <span style="color:#9ca3af;font-size:13px;">Loading accounts...</span>';
+        } else {
+          accountsHtml = platformConfig
+            .map(([platform, label, icon]) =>
+              socialAccounts
+                .filter(a => a.platform === platform)
+                .map(a => renderAccountBadge(location, a, label, icon))
+                .join('')
+            )
+            .join('');
+          if (socialAccounts.length === 0) {
+            accountsHtml = '<span style="color: #9ca3af; font-size: 13px;">No social accounts connected</span>';
+          }
+        }
+
+        return `
+          <tr>
+            <td style="font-weight: 500;">
+              ${escapeHtml(location.location_name)}
+              ${(!accountsLoading && hasIssues) ? '<span style="margin-left: 8px; font-size: 14px;">⚠️</span>' : ''}
+            </td>
+            <td style="font-family: monospace; font-size: 12px;">${location.location_id}</td>
+            <td>${accountsHtml}</td>
+            <td>
+              <button class="connect-btn" onclick="openConnectModal('${location.location_id}', '${escapeHtml(location.location_name)}')">+ Connect</button>
+              <button class="edit-btn" onclick="viewCalendar('${location.location_id}', '${escapeHtml(location.location_name)}')">View Posts</button>
+              <button class="disconnect-btn" onclick="deleteLocation('${location.location_id}')">Remove</button>
+              <span class="refresh-icon" onclick="refreshLocation('${location.location_id}')" title="Refresh social accounts"><i class="fa fa-refresh" style="font-size:14px;color:#6b7280;cursor:pointer;"></i></span>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+
+    function renderPagination() {
+      const container = document.getElementById('paginationControls');
+      const info = document.getElementById('paginationInfo');
+      const buttons = document.getElementById('paginationButtons');
+
+      if (totalCount === 0) {
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'flex';
+
+      const start = (currentPage - 1) * PAGE_SIZE + 1;
+      const end = Math.min(currentPage * PAGE_SIZE, totalCount);
+      info.textContent = `Showing ${start}–${end} of ${totalCount} subaccounts`;
+
+      // Compact page number window: 1 ... (p-1) p (p+1) ... N
+      const pages = [];
+      const windowSet = new Set([1, totalPages, currentPage - 1, currentPage, currentPage + 1]);
+      for (let p = 1; p <= totalPages; p++) {
+        if (windowSet.has(p)) pages.push(p);
+        else if (pages[pages.length - 1] !== '...') pages.push('...');
+      }
+
+      let html = `<button class="page-btn" onclick="loadLocations(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>‹ Prev</button>`;
+      html += pages.map(p =>
+        p === '...'
+          ? '<span style="padding: 0 4px; color:#9ca3af;">…</span>'
+          : `<button class="page-btn ${p === currentPage ? 'current' : ''}" onclick="loadLocations(${p})" ${p === currentPage ? 'disabled' : ''}>${p}</button>`
+      ).join('');
+      html += `<button class="page-btn" onclick="loadLocations(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next ›</button>`;
+      buttons.innerHTML = html;
+    }
+
+    function viewCalendar(locationId, locationName) {
+      const now = new Date();
+      const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const date = firstOfMonth.toISOString().split("T")[0];
+
+      const url = new URL(`https://my.fgpcrm.com/v2/location/${locationId}/marketing/social-planner/planner`);
+      url.searchParams.set("tab", "calendar");
+      url.searchParams.set("page", "1");
+      url.searchParams.set("date", date);
+      window.open(url.toString(), "_blank");
+    }
+
+    // ============ MODALS ============
+    function openAddLocationModal() {
+      document.getElementById('addLocationModal').classList.add('active');
+    }
+
+    function closeAddLocationModal() {
+      document.getElementById('addLocationModal').classList.remove('active');
+    }
+
+    function startLocationAuth() {
+      window.open('/auth/location/new', '_blank', 'width=600,height=700');
+      window.addEventListener('message', async function handler(e) {
+        if (e.data && e.data.type === 'location_connected') {
+          window.removeEventListener('message', handler);
+          closeAddLocationModal();
+          await loadLocations(currentPage);
+        }
+      });
+    }
+
+    function openConnectModal(locationId, locationName) {
+      currentConnectingLocation = { id: locationId, name: locationName };
+      selectedPlatform = null;
+      oauthAccountId = null;
+      availableAccounts = [];
+
+      document.getElementById('modalLocationInfo').innerHTML = `
+        <strong>${escapeHtml(locationName)}</strong><br>
+        <span style="font-size: 12px; color: #6b7280;">ID: ${locationId}</span>`;
+      document.getElementById('oauthStatus').innerHTML = '';
+      document.querySelectorAll('.platform-option').forEach(opt => opt.classList.remove('selected'));
+      document.getElementById('startOAuthBtn').disabled = true;
+      document.getElementById('startOAuthBtn').textContent = 'Select a platform first';
+      document.getElementById('connectModal').classList.add('active');
+    }
+
+    function selectPlatform(platform) {
+      selectedPlatform = platform;
+      availableAccounts = [];
+      document.getElementById('oauthStatus').innerHTML = '';
+      let displayPlatform = platform.charAt(0).toUpperCase() + platform.slice(1).toLowerCase();
+      document.querySelectorAll('.platform-option').forEach(opt => opt.classList.remove('selected'));
+      document.querySelector(`.platform-option[data-platform="${platform}"]`).classList.add('selected');
+      document.getElementById('startOAuthBtn').disabled = false;
+      document.getElementById('startOAuthBtn').textContent = `Connect ${displayPlatform}`;
+    }
+
+    async function startPlatformOAuth() {
+      if (!selectedPlatform || !currentConnectingLocation) return;
+
+      const startBtn = document.getElementById('startOAuthBtn');
+      startBtn.disabled = true;
+      startBtn.textContent = 'Starting...';
+      document.getElementById('oauthStatus').innerHTML = '<div class="info-message">Opening authentication window...</div>';
+
+      try {
+        const userId = currentConnectingLocation.id;
+        const response = await fetch('/api/oauth/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            platform: selectedPlatform,
+            locationId: currentConnectingLocation.id,
+            userId: userId
+          })
+        });
+
+        const data = await response.json();
+        if (!data.oauthUrl) throw new Error(data.error || 'No OAuth URL returned');
+
+        const popup = window.open(data.oauthUrl, 'OAuth', 'width=600,height=700');
+
+        window.addEventListener('message', async function handler(e) {
+          if (e.data && e.data.page === 'social_media_posting') {
+            window.removeEventListener('message', handler);
+            if (e.data.accountId) {
+              oauthAccountId = e.data.accountId;
+              await fetchAndDisplayAvailableAccounts();
+            } else {
+              document.getElementById('oauthStatus').innerHTML = '<div class="error-message">Authentication failed</div>';
+            }
+            if (popup && !popup.closed) popup.close();
+          }
+        });
+      } catch (error) {
+        document.getElementById('oauthStatus').innerHTML = `<div class="error-message">Error: ${error.message}</div>`;
+      } finally {
+        startBtn.disabled = false;
+        startBtn.textContent = `Connect ${selectedPlatform}`;
+      }
+    }
+
+    async function fetchAndDisplayAvailableAccounts() {
+      document.getElementById('oauthStatus').innerHTML = '<div class="info-message">Fetching available accounts...</div>';
+
+      try {
+        const response = await fetch('/api/oauth/accounts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            locationId: currentConnectingLocation.id,
+            platform: selectedPlatform,
+            accountId: oauthAccountId
+          })
+        });
+
+        const data = await response.json();
+        if (data.success && data.accounts && data.accounts.length > 0) {
+          availableAccounts = data.accounts;
+          displayAccountSelection();
+        } else {
+          document.getElementById('oauthStatus').innerHTML =
+            '<div class="error-message">No accounts found for this login. Make sure the profile you authenticated with manages at least one page/profile/location on this platform.</div>';
+        }
+      } catch (error) {
+        document.getElementById('oauthStatus').innerHTML = '<div class="error-message">Failed to fetch accounts</div>';
+      }
+    }
+
+    function displayAccountSelection() {
+      let html = '<h4 style="margin: 16px 0 12px;">Select account to connect:</h4>';
+      availableAccounts.forEach((account, index) => {
+        html += `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              ${account.avatar ? `<img src="${account.avatar}" style="width: 32px; height: 32px; border-radius: 50%;" onerror="this.style.display='none'">` : ''}
+              <div>
+                <strong>${escapeHtml(account.name)}</strong>
+                ${account.type ? `<span class="account-type-tag" style="margin-left: 8px;">${escapeHtml(account.type)}</span>` : ''}
+              </div>
+            </div>
+            <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="attachAccount(${index})">Connect</button>
+          </div>`;
+      });
+      document.getElementById('oauthStatus').innerHTML = html;
+    }
+
+    async function attachAccount(index) {
+      const account = availableAccounts[index];
+      if (!account) return;
+
+      document.getElementById('oauthStatus').innerHTML = '<div class="info-message">Connecting account...</div>';
+
+      try {
+        const response = await fetch('/api/oauth/attach', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            locationId: currentConnectingLocation.id,
+            platform: selectedPlatform,
+            accountId: oauthAccountId,
+            account: account // full normalized object — server builds the platform-specific payload
+          })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          document.getElementById('oauthStatus').innerHTML = '<div class="success-message">Connected! Refreshing...</div>';
+          setTimeout(async () => {
+            await loadSocialAccountsForPage();
+            updateStats();
+            renderTable(false);
+            closeModal();
+          }, 1500);
+        } else {
+          throw new Error(data.details || data.error || 'Failed to connect');
+        }
+      } catch (error) {
+        document.getElementById('oauthStatus').innerHTML = `<div class="error-message">Failed: ${error.message}</div>`;
+      }
+    }
+
+    // ============ ACTIONS ============
+    async function deleteSocialAccount(locationId, accountId) {
+      if (!accountId) {
+        showToast('Error: Account ID not found', 'error');
+        return;
+      }
+      if (!confirm('Are you sure you want to disconnect this social account? This action cannot be undone.')) return;
+
+      try {
+        const response = await fetch(`/api/social-accounts/${locationId}/${accountId}`, {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          showToast('Social account disconnected successfully', 'success');
+          await loadSocialAccountsForPage();
+          updateStats();
+          renderTable(false);
+        } else {
+          throw new Error(data.details || data.error || 'Failed to disconnect');
+        }
+      } catch (error) {
+        console.error('Error deleting social account:', error);
+        showToast('Failed to disconnect account: ' + error.message, 'error');
+      }
+    }
+
+    async function refreshLocation(locationId) {
+      await loadSocialAccountsForPage();
+      updateStats();
+      renderTable(false);
+      showToast('Social accounts refreshed', 'success');
+    }
+
+    async function refreshAll() {
+      const btn = event.target;
+      btn.disabled = true;
+      btn.textContent = 'Refreshing...';
+      try {
+        await loadLocations(currentPage);
+        showToast('All data refreshed', 'success');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Refresh All';
+      }
+    }
+
+    async function deleteLocation(locationId) {
+      if (!confirm('Are you sure you want to remove this subaccount? This will disconnect all social accounts.')) return;
+
+      try {
+        const response = await fetch(`/api/locations/${locationId}`, { method: 'DELETE' });
+        const data = await response.json();
+
+        if (data.success) {
+          // If we just removed the last item on this page, go back a page
+          const targetPage = (locations.length === 1 && currentPage > 1) ? currentPage - 1 : currentPage;
+          await loadLocations(targetPage);
+          showToast('Subaccount removed', 'success');
+        } else {
+          alert('Failed to remove subaccount');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to remove subaccount');
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('connectModal').classList.remove('active');
+      currentConnectingLocation = null;
+      selectedPlatform = null;
+      oauthAccountId = null;
+      availableAccounts = [];
+    }
+
+    // ============ HELPERS ============
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function showToast(message, type) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed; bottom: 20px; right: 20px; padding: 12px 20px;
+        border-radius: 8px; color: white; z-index: 1000;
+        animation: slideIn 0.3s ease;
+        background: ${type === 'success' ? '#10b981' : '#ef4444'};`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Load first page on startup
+    loadLocations(1);
+  </script>
+</body>
+</html>
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subaccount Social Media Manager</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f3f4f6; min-height: 100vh; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    .header { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    h1 { font-size: 28px; color: #1f2937; margin-bottom: 8px; }
+    .subtitle { color: #6b7280; margin-bottom: 24px; }
+    .btn-primary { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+    .btn-primary:hover { background: #2563eb; }
     .btn-secondary { background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; }
     .btn-secondary:hover { background: #4b5563; }
     .btn-success { background: #10b981; }
@@ -1192,4 +1948,4 @@
     loadLocations();
   </script> -->
 </body>
-</html>
+</html> -->
