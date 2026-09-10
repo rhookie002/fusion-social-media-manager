@@ -6,9 +6,10 @@
   <title>Subaccount Social Media Manager</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f3f4f6; min-height: 100vh; }
-    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-    .header { background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; background: #f3f4f6; height: 100vh; overflow: hidden; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; height: 100vh; display: flex; flex-direction: column; }
+    #mainContent { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .header { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); flex-shrink: 0; }
     h1 { font-size: 28px; color: #1f2937; margin-bottom: 8px; }
     .subtitle { color: #6b7280; margin-bottom: 24px; }
     .btn-primary { background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; }
@@ -18,12 +19,13 @@
     .btn-secondary:hover { background: #4b5563; }
     .btn-success { background: #10b981; }
     .btn-success:hover { background: #059669; }
-    .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 20px; }
+    .table-container { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-top: 0; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .table-scroll { flex: 1; overflow-y: auto; min-height: 0; }
     table { width: 100%; border-collapse: collapse; }
-    th { text-align: left; padding: 16px; background: #f9fafb; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; }
+    th { text-align: left; padding: 16px; background: #f9fafb; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 5; }
     td { padding: 16px; border-bottom: 1px solid #f3f4f6; }
     tr:hover { background: #f9fafb; }
-    .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 16px; }
+    .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 16px; flex-shrink: 0; }
     .filter-btn { padding: 8px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; border: 1px solid #d1d5db; background: white; transition: all 0.2s; }
     .filter-btn:hover { background: #f3f4f6; }
     .filter-btn.active { background: #3b82f6; color: white; border-color: #3b82f6; }
@@ -32,10 +34,11 @@
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     .search-box { flex: 1; max-width: 300px; position: relative; }
     .search-box input { width: 100%; padding: 10px 16px; border: 1px solid #d1d5db; border-radius: 8px; }
-    .stats { display: flex; gap: 16px; margin-bottom: 20px; }
-    .stat-card { background: white; padding: 16px 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .stat-number { font-size: 28px; font-weight: bold; color: #1f2937; }
-    .stat-label { font-size: 14px; color: #6b7280; }
+    .stats { display: flex; gap: 16px; margin-bottom: 16px; flex-shrink: 0; }
+    .stat-card { background: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-number { font-size: 26px; font-weight: bold; color: #1f2937; min-height: 34px; display: flex; align-items: center; }
+    .stat-label { font-size: 13px; color: #6b7280; }
+    .stats-updated { font-size: 11px; color: #9ca3af; margin-top: 2px; }
     .account-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #f3f4f6; border-radius: 20px; margin: 4px; font-size: 13px; }
     .account-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
     .status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-left: 8px; }
@@ -68,7 +71,7 @@
     .info-message { background: #eff6ff; color: #1e40af; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
     .account-type-tag { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #e0e7ff; color: #4338ca; text-transform: capitalize; }
     /* Pagination */
-    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; background: white; border-top: 1px solid #e5e7eb; flex-wrap: wrap; gap: 12px; }
+    .pagination { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: white; border-top: 1px solid #e5e7eb; flex-wrap: wrap; gap: 12px; flex-shrink: 0; }
     .pagination-info { font-size: 13px; color: #6b7280; }
     .pagination-buttons { display: flex; gap: 6px; align-items: center; }
     .page-btn { padding: 7px 13px; border: 1px solid #d1d5db; background: white; border-radius: 8px; font-size: 13px; cursor: pointer; color: #374151; }
@@ -97,12 +100,13 @@
           <div class="stat-label">Connected Subaccounts</div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="totalConnections">0</div>
-          <div class="stat-label">Social Connections (this page)</div>
+          <div class="stat-number" id="totalConnections"><span class="spinner-sm"></span></div>
+          <div class="stat-label">Social Connections (all pages)</div>
+          <div class="stats-updated" id="statsUpdated"></div>
         </div>
         <div class="stat-card">
-          <div class="stat-number" id="totalIssues">0</div>
-          <div class="stat-label">Accounts with Issues (this page)</div>
+          <div class="stat-number" id="totalIssues"><span class="spinner-sm"></span></div>
+          <div class="stat-label">Accounts with Issues (all pages)</div>
         </div>
       </div>
 
@@ -110,6 +114,7 @@
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="Search subaccount by name..." oninput="onSearchInput()">
         </div>
+        <div class="pagination-buttons" id="paginationButtonsTop"></div>
         <div style="display: flex; gap: 8px;">
           <button class="filter-btn active" onclick="setFilter('all')" id="filterAll">All</button>
           <button class="filter-btn" onclick="setFilter('healthy')" id="filterHealthy">Healthy</button>
@@ -118,24 +123,26 @@
       </div>
 
       <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Subaccount Name</th>
-              <th>Location ID</th>
-              <th>Connected Social Accounts</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="locationsTableBody">
-            <tr>
-              <td colspan="4" class="loading">
-                <div class="spinner"></div>
-                Loading connected subaccounts...
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Subaccount Name</th>
+                <th>Location ID</th>
+                <th>Connected Social Accounts</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="locationsTableBody">
+              <tr>
+                <td colspan="4" class="loading">
+                  <div class="spinner"></div>
+                  Loading connected subaccounts...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div class="pagination" id="paginationControls" style="display: none;">
           <div class="pagination-info" id="paginationInfo"></div>
           <div class="pagination-buttons" id="paginationButtons"></div>
@@ -269,7 +276,6 @@
         await loadSocialAccountsForPage(seq);
         if (seq !== loadSequence) return;
 
-        updateStats();
         renderTable(false);
       } catch (error) {
         console.error('Error loading locations:', error);
@@ -306,18 +312,65 @@
     }
 
     // ============ STATS / FILTERS ============
-    function updateStats() {
-      document.getElementById('totalLocations').textContent = totalCount;
+    // Global stats across ALL pages come from /api/stats (server-side, cached).
+    let globalStats = null;
 
-      let totalConnections = 0;
-      let totalIssues = 0;
-      for (const locationId in socialAccountsCache) {
-        const accounts = socialAccountsCache[locationId] || [];
-        totalConnections += accounts.length;
-        totalIssues += accounts.filter(a => a.isExpired === true).length;
+    function renderGlobalStats(note) {
+      const connEl = document.getElementById('totalConnections');
+      const issuesEl = document.getElementById('totalIssues');
+      const updatedEl = document.getElementById('statsUpdated');
+
+      if (!globalStats) {
+        connEl.textContent = '—';
+        issuesEl.textContent = '—';
+        updatedEl.textContent = '';
+        return;
       }
-      document.getElementById('totalConnections').textContent = totalConnections;
-      document.getElementById('totalIssues').textContent = totalIssues;
+      connEl.textContent = globalStats.totalConnections;
+      issuesEl.textContent = globalStats.totalIssues;
+      if (!autoFilterLocationId) {
+        document.getElementById('totalLocations').textContent = globalStats.totalLocations;
+      }
+      if (note) {
+        updatedEl.textContent = note;
+      } else {
+        const when = new Date(globalStats.computedAt);
+        updatedEl.textContent = 'As of ' + when.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          + (globalStats.failedLocations ? ` · ${globalStats.failedLocations} unreachable` : '');
+      }
+    }
+
+    async function loadGlobalStats(force = false) {
+      const connEl = document.getElementById('totalConnections');
+      const issuesEl = document.getElementById('totalIssues');
+      const updatedEl = document.getElementById('statsUpdated');
+      connEl.innerHTML = '<span class="spinner-sm"></span>';
+      issuesEl.innerHTML = '<span class="spinner-sm"></span>';
+      updatedEl.textContent = force ? 'Recounting all subaccounts...' : 'Counting...';
+
+      try {
+        const response = await fetch('/api/stats' + (force ? '?refresh=true' : ''));
+        const data = await response.json();
+        if (data.success && data.stats) {
+          globalStats = data.stats;
+        } else {
+          globalStats = null;
+        }
+      } catch (error) {
+        console.error('Error loading global stats:', error);
+        globalStats = null;
+      }
+      renderGlobalStats();
+    }
+
+    // Cheap local adjustment after a single connect/disconnect — avoids
+    // re-hitting GHL for all locations. The next scheduled/forced recount
+    // will true it up.
+    function adjustGlobalStats(deltaConnections, deltaIssues) {
+      if (!globalStats) return;
+      globalStats.totalConnections = Math.max(0, globalStats.totalConnections + deltaConnections);
+      globalStats.totalIssues = Math.max(0, globalStats.totalIssues + (deltaIssues || 0));
+      renderGlobalStats('Updated just now (approx. — use Refresh All for an exact recount)');
     }
 
     function setFilter(filter) {
@@ -433,9 +486,11 @@
       const container = document.getElementById('paginationControls');
       const info = document.getElementById('paginationInfo');
       const buttons = document.getElementById('paginationButtons');
+      const buttonsTop = document.getElementById('paginationButtonsTop');
 
       if (totalCount === 0) {
         container.style.display = 'none';
+        buttonsTop.innerHTML = '';
         return;
       }
       container.style.display = 'flex';
@@ -460,6 +515,7 @@
       ).join('');
       html += `<button class="page-btn" onclick="loadLocations(${currentPage + 1})" ${currentPage >= totalPages ? 'disabled' : ''}>Next ›</button>`;
       buttons.innerHTML = html;
+      buttonsTop.innerHTML = html; // same controls next to the search bar
     }
 
     function viewCalendar(locationId, locationName) {
@@ -634,9 +690,9 @@
           document.getElementById('oauthStatus').innerHTML = '<div class="success-message">Connected! Refreshing...</div>';
           setTimeout(async () => {
             await loadSocialAccountsForPage();
-            updateStats();
             renderTable(false);
             closeModal();
+            adjustGlobalStats(+1, 0);
           }, 1500);
         } else {
           throw new Error(data.details || data.error || 'Failed to connect');
@@ -654,6 +710,9 @@
       }
       if (!confirm('Are you sure you want to disconnect this social account? This action cannot be undone.')) return;
 
+      const removed = (socialAccountsCache[locationId] || []).find(a => a.id === accountId);
+      const removedWasIssue = removed && removed.isExpired === true ? 1 : 0;
+
       try {
         const response = await fetch(`/api/social-accounts/${locationId}/${accountId}`, {
           method: 'DELETE',
@@ -664,8 +723,8 @@
         if (data.success) {
           showToast('Social account disconnected successfully', 'success');
           await loadSocialAccountsForPage();
-          updateStats();
           renderTable(false);
+          adjustGlobalStats(-1, -removedWasIssue);
         } else {
           throw new Error(data.details || data.error || 'Failed to disconnect');
         }
@@ -677,7 +736,6 @@
 
     async function refreshLocation(locationId) {
       await loadSocialAccountsForPage();
-      updateStats();
       renderTable(false);
       showToast('Social accounts refreshed', 'success');
     }
@@ -687,7 +745,7 @@
       btn.disabled = true;
       btn.textContent = 'Refreshing...';
       try {
-        await loadLocations(currentPage);
+        await Promise.all([loadLocations(currentPage), loadGlobalStats(true)]);
         showToast('All data refreshed', 'success');
       } finally {
         btn.disabled = false;
@@ -744,12 +802,12 @@
       setTimeout(() => toast.remove(), 3000);
     }
 
-    // Load first page on startup
+    // Load first page + global stats on startup (stats load in the background)
     loadLocations(1);
+    loadGlobalStats();
   </script>
 </body>
 </html>
-
 
 
 
