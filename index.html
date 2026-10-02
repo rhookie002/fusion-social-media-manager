@@ -550,7 +550,7 @@
       });
     }
 
-    function openConnectModal(locationId, locationName) {
+    function openConnectModal(locationId) {
       const loc = locations.find(l => l.location_id === locationId);
       const locationName = loc ? loc.location_name : '';
       currentConnectingLocation = { id: locationId, name: locationName };
