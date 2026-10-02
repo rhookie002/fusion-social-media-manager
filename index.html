@@ -473,8 +473,8 @@
             <td style="font-family: monospace; font-size: 12px;">${location.location_id}</td>
             <td>${accountsHtml}</td>
             <td>
-              <button class="connect-btn" onclick="openConnectModal('${location.location_id}', '${escapeHtml(location.location_name)}')">+ Connect</button>
-              <button class="edit-btn" onclick="viewCalendar('${location.location_id}', '${escapeHtml(location.location_name)}')">View Posts</button>
+              <button class="connect-btn" onclick="openConnectModal('${location.location_id}')">+ Connect</button>
+              <button class="edit-btn" onclick="viewCalendar('${location.location_id}')">View Posts</button>
               <button class="disconnect-btn" onclick="deleteLocation('${location.location_id}')">Remove</button>
               <span class="refresh-icon" onclick="refreshLocation('${location.location_id}')" title="Refresh social accounts"><i class="fa fa-refresh" style="font-size:14px;color:#6b7280;cursor:pointer;"></i></span>
             </td>
@@ -551,6 +551,8 @@
     }
 
     function openConnectModal(locationId, locationName) {
+      const loc = locations.find(l => l.location_id === locationId);
+      const locationName = loc ? loc.location_name : '';
       currentConnectingLocation = { id: locationId, name: locationName };
       selectedPlatform = null;
       oauthAccountId = null;
@@ -1300,7 +1302,7 @@
         `;
       }).join('');
     }
-    function viewCalendar(locationId, locationName) {
+    function viewCalendar(locationId) {
       // Get today's date
       const now = new Date();
 
@@ -1548,9 +1550,12 @@
     
     function escapeHtml(text) {
       if (!text) return '';
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
     
     function showToast(message, type) {
